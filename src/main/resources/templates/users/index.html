@@ -1,0 +1,53 @@
+<!DOCTYPE html>
+<html lang="en" xmlns:th="http://www.thymeleaf.org">
+<head>
+    <meta charset="UTF-8">
+    <title>Show users</title>
+</head>
+<style>
+    table, th, td {
+        border: 1px solid black;
+        border-collapse: collapse;
+    }
+    tr:nth-child(even) {
+        background-color: rgba(150, 212, 212, 0.2);
+    }
+    tr:hover {background-color: #D6EEEE;}
+    th {
+        background-color: #04AA6D;
+        color: white;
+    }
+</style>
+<body>
+<a href="/users/new">Добавить пользователя</a>
+
+<table style="width:50%">
+    <thead>
+    <tr>
+        <th>Name</th>
+        <th>Email</th>
+        <th>Update</th>
+        <th>Remove</th>
+    </tr>
+    </thead>
+    <tbody >
+    <tr th:each="user : ${users}">
+
+        <td th:text="${user.getName()}"></td>
+        <td th:text="${user.getEmail()}"></td>
+        <td>
+            <form th:method="GET" th:action="@{/users/{id}/edit(id=${user.getId()})}">
+                <input type="submit" value="Edit">
+            </form>
+        </td>
+        <td>
+            <form th:method="DELETE" th:action="@{/users/{id}(id=${user.getId()})}">
+                <input type="submit" value="Delete">
+            </form>
+        </td>
+
+    </tr>
+    </tbody>
+</table>
+</body>
+</html>
