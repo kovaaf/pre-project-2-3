@@ -1,0 +1,43 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>Show user</title>
+</head>
+<style>
+    table, th, td {
+        border: 1px solid black;
+        border-collapse: collapse;
+    }
+    tr:nth-child(even) {
+        background-color: rgba(150, 212, 212, 0.2);
+    }
+    tr:hover {background-color: #D6EEEE;}
+    th {
+        background-color: #04AA6D;
+        color: white;
+    }
+</style>
+<body>
+    <p><a href="/admin">Админка</a></p>
+    <p><a href="/logout">Logout</a></p>
+    <table style="width:50%">
+        <thead>
+        <tr>
+            <th>Username</th>
+            <th>Email</th>
+            <th>Roles</th>
+        </tr>
+        </thead>
+        <tbody >
+        <tr>
+
+            <td th:text="${user.getName()}"></td>
+            <td th:text="${user.getEmail()}"></td>
+            <td th:text="${user.getRolesList()}"></td>
+
+        </tr>
+        </tbody>
+    </table>
+</body>
+</html>

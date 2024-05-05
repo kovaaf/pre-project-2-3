@@ -11,3 +11,8 @@ spring:
     hiddenmethod:
       filter:
         enabled: true
+    servlet:
+      load-on-startup: 1
+roles:
+  admin: ROLE_ADMIN
+  user: ROLE_USER

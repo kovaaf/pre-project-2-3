@@ -5,7 +5,8 @@
     <title>Create user</title>
 </head>
 <body>
-<form th:method="post" th:action="@{/users}" th:object="${user}">
+<p><a href="/logout">Logout</a></p>
+<form th:method="post" th:action="@{/admin}" th:object="${user}">
     <label for="name">Name</label>
     <input th:field="*{name}" type="text" id="name"/>
     <div style="color: red" th:if="${#fields.hasErrors('name')}" th:errors="*{name}">Error message</div>
@@ -22,6 +23,6 @@
 
 <br/>
 
-<a href="/users">Вернуться к списку всех пользователей</a>
+<a href="/admin">Вернуться к списку всех пользователей</a>
 </body>
 </html>

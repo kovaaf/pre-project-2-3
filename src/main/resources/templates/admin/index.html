@@ -19,13 +19,16 @@
     }
 </style>
 <body>
-<a href="/users/new">Добавить пользователя</a>
+<p><a href="/logout">Logout</a></p>
+<p><a href="/user">Страница текущего пользователя</a></p>
+<p><a href="/admin/new">Add new user</a></p>
 
 <table style="width:50%">
     <thead>
     <tr>
-        <th>Name</th>
+        <th>Username</th>
         <th>Email</th>
+        <th>Roles</th>
         <th>Update</th>
         <th>Remove</th>
     </tr>
@@ -35,13 +38,14 @@
 
         <td th:text="${user.getName()}"></td>
         <td th:text="${user.getEmail()}"></td>
+        <td th:text="${user.getRolesList()}"></td>
         <td>
-            <form th:method="GET" th:action="@{/users/{id}/edit(id=${user.getId()})}">
+            <form th:method="GET" th:action="@{/admin/{id}/edit(id=${user.getId()})}">
                 <input type="submit" value="Edit">
             </form>
         </td>
         <td>
-            <form th:method="DELETE" th:action="@{/users/{id}(id=${user.getId()})}">
+            <form th:method="DELETE" th:action="@{/admin/{id}(id=${user.getId()})}">
                 <input type="submit" value="Delete">
             </form>
         </td>
