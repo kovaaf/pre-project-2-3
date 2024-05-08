@@ -9,8 +9,6 @@ import org.springframework.security.core.GrantedAuthority;
 import javax.persistence.*;
 import javax.validation.constraints.Pattern;
 
-// Этот класс реализует интерфейс GrantedAuthority, в котором необходимо переопределить только один метод getAuthority() (возвращает имя роли).
-// Имя роли должно соответствовать шаблону: «ROLE_ИМЯ», например, ROLE_USER.
 @Getter
 @Setter
 @AllArgsConstructor

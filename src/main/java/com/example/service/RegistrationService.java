@@ -8,12 +8,14 @@ import com.example.model.dto.UserDTO;
 import com.example.repository.RoleRepository;
 import com.example.repository.UserRepository;
 import com.example.utils.mappers.UserDTOMapper;
+import lombok.RequiredArgsConstructor;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
 
 import javax.transaction.Transactional;
 import java.util.Set;
 
+@RequiredArgsConstructor
 @Service
 public class RegistrationService {
     private final UserRepository userRepository;
@@ -21,14 +23,6 @@ public class RegistrationService {
     private final PasswordEncoder passwordEncoder;
     private final RoleProperties roleProperties;
     private final UserDTOMapper userDTOMapper;
-
-    public RegistrationService(UserRepository userRepository, RoleRepository roleRepository, PasswordEncoder passwordEncoder, RoleProperties roleProperties, UserDTOMapper userDTOMapper) {
-        this.userRepository = userRepository;
-        this.roleRepository = roleRepository;
-        this.passwordEncoder = passwordEncoder;
-        this.roleProperties = roleProperties;
-        this.userDTOMapper = userDTOMapper;
-    }
 
     @Transactional
     public void registerNewUserAccount(UserDTO userDTO) {

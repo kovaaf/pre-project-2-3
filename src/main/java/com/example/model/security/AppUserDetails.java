@@ -2,19 +2,16 @@ package com.example.model.security;
 
 import com.example.model.User;
 import lombok.Getter;
+import lombok.RequiredArgsConstructor;
 import org.springframework.security.core.GrantedAuthority;
 import org.springframework.security.core.userdetails.UserDetails;
 
 import java.util.Collection;
 
-// Для того, чтобы в дальнейшим использовать класс PersonDetails в Spring Security, он должен реализовывать интерфейс UserDetails.
-// UserDetails можно представить, как адаптер между БД пользователей и тем что требуется Spring Security внутри SecurityContextHolder
 @Getter
+@RequiredArgsConstructor
 public class AppUserDetails implements UserDetails {
-    private final User user; // Алишев говорит, что это best practice создавать обёртку такую
-    public AppUserDetails(User user) {
-        this.user = user;
-    }
+    private final User user;
 
     @Override
     public Collection<? extends GrantedAuthority> getAuthorities() {
