@@ -23,7 +23,7 @@ public class SecurityConfig extends WebSecurityConfigurerAdapter {
     private final SuccessUserHandler successUserHandler;
     private final RoleProperties roleProperties;
 
-     @Autowired
+    @Autowired
     public void configureGlobalSecurity(AuthenticationManagerBuilder auth) throws Exception {
         auth
                 .userDetailsService(userDetailsService)
@@ -32,13 +32,12 @@ public class SecurityConfig extends WebSecurityConfigurerAdapter {
 
     @Override
     protected void configure(HttpSecurity http) throws Exception {
-        http.authorizeRequests()
-                .antMatchers("/user/**").access(getAnyRoleString(roleProperties.getUser(), roleProperties.getAdmin()))
-                .antMatchers("/admin/**").access(getAnyRoleString(roleProperties.getAdmin()))
-                .antMatchers("/**").permitAll()
+        http
+                .csrf().disable()
+                .authorizeRequests()
+                .antMatchers("/api/v2/admin/**").access(getAnyRoleString(roleProperties.getAdmin()))
+                .antMatchers("/api/v2/register","/registration", "/js/**", "/css/**").permitAll()
                 .anyRequest().authenticated()
-            .and()
-                .exceptionHandling().accessDeniedPage("/denied")
             .and()
                 .formLogin()
                 .successHandler(successUserHandler);

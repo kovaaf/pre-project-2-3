@@ -1,43 +1,46 @@
 package com.example.utils;
 
+import com.example.exceptions.UsernameAlreadyTakenException;
 import com.example.model.User;
-import com.example.service.AdminService;
+import com.example.service.UserService;
 import lombok.RequiredArgsConstructor;
-import org.springframework.lang.NonNull;
 import org.springframework.stereotype.Component;
-import org.springframework.validation.Errors;
-import org.springframework.validation.Validator;
 
 @RequiredArgsConstructor
 @Component
-public class UserValidator implements Validator {
-    private final AdminService adminService;
+public class UserValidator {
+    private final UserService userService;
 
-    @Override
-    public boolean supports(@NonNull Class<?> clazz) {
-        return User.class.equals(clazz);
-    }
+    public void validate(User updatedUser) {
+        boolean usernameTaken = isUsernameTaken(updatedUser);
+        boolean isNewUser = isNewUser(updatedUser);
 
-    @Override
-    public void validate(@NonNull Object target, @NonNull Errors errors) {
-        User user = (User) target;
-
-        if (isNewUser(user) && isUsernameTaken(user)) {
-            errors.rejectValue("name", "", "This username is already taken");
-        } else if (!isNewUser(user) && isUsernameTaken(user) && !isNameTheSame(user)) {
-            errors.rejectValue("name", "", "This username is already taken");
+        if (isNewUser && usernameTaken) { // новый пользователь пытается взять имя пользователя в БД
+            throw new UsernameAlreadyTakenException(updatedUser.getName());
         }
     }
 
-    private static boolean isNewUser(User user) {
+    public void validate(User updatedUser, User persistedUser) {
+        boolean usernameTaken = isUsernameTaken(updatedUser);
+        boolean isNewUser = isNewUser(updatedUser);
+        boolean isUsernameDifferent = isUsernameDifferent(updatedUser, persistedUser);
+
+        if (!isNewUser && isUsernameDifferent && usernameTaken) { // существующий пользователь пытается присвоить чужое имя пользователя
+            throw new UsernameAlreadyTakenException(updatedUser.getName());
+        }
+    }
+
+    private boolean isNewUser(User user) {
         return user.getId() == null;
     }
 
-    private boolean isNameTheSame(User user) {
-        return adminService.findById(user.getId()).getName().equalsIgnoreCase(user.getName());
+    private boolean isUsernameDifferent(User updatedUser, User persistedUser) {
+        String usersName = userService.findById(updatedUser.getId()).getName();
+        String desiredName = persistedUser.getName();
+        return !usersName.equalsIgnoreCase(desiredName);
     }
 
     private boolean isUsernameTaken(User user) {
-        return adminService.findByNameIgnoreCase(user.getName()).isPresent();
+        return userService.findByNameIgnoreCase(user.getName()).isPresent();
     }
 }

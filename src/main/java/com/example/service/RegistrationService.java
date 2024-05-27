@@ -5,9 +5,11 @@ import com.example.exceptions.RoleNotFoundException;
 import com.example.model.Role;
 import com.example.model.User;
 import com.example.model.dto.UserDTO;
+import com.example.model.dto.UserRegisterDTO;
+import com.example.model.dto.mappers.UserDTOMapper;
 import com.example.repository.RoleRepository;
 import com.example.repository.UserRepository;
-import com.example.utils.mappers.UserDTOMapper;
+import com.example.utils.UserValidator;
 import lombok.RequiredArgsConstructor;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
@@ -23,17 +25,23 @@ public class RegistrationService {
     private final PasswordEncoder passwordEncoder;
     private final RoleProperties roleProperties;
     private final UserDTOMapper userDTOMapper;
+    private final UserValidator userValidator;
 
     @Transactional
-    public void registerNewUserAccount(UserDTO userDTO) {
-        User newUser = setFields(userDTO);
+    public UserDTO registerNewUserAccount(UserRegisterDTO userRegisterDTO) {
+        User newUser = setFields(userRegisterDTO);
 
-        userRepository.save(newUser);
+        userValidator.validate(newUser);
+
+        User save = userRepository.save(newUser);
+        userDTOMapper.convertToUserDTO(save);
+
+        return userDTOMapper.convertToUserDTO(save);
     }
 
-    private User setFields(UserDTO userDTO) {
-        User mappedToUser = userDTOMapper.mapToUser(userDTO);
-        mappedToUser.setPassword(passwordEncoder.encode(userDTO.getPassword()));
+    private User setFields(UserRegisterDTO userRegisterDTO) {
+        User mappedToUser = userDTOMapper.convertToUser(userRegisterDTO);
+        mappedToUser.setPassword(passwordEncoder.encode(userRegisterDTO.getPassword()));
         setDefaultRole(mappedToUser);
         return mappedToUser;
     }

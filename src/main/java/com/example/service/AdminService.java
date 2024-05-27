@@ -4,53 +4,59 @@ import com.example.config.properties.RoleProperties;
 import com.example.exceptions.NotAllowedDeleteOperationException;
 import com.example.exceptions.RoleNotFoundException;
 import com.example.exceptions.UserNotFoundException;
-import com.example.model.Role;
 import com.example.model.User;
+import com.example.model.dto.UserCreationDTO;
+import com.example.model.dto.UserDTO;
+import com.example.model.dto.UserUpdateDTO;
+import com.example.model.dto.mappers.UserDTOMapper;
 import com.example.repository.RoleRepository;
 import com.example.repository.UserRepository;
-import com.example.service.shared.HasAuthUser;
+import com.example.utils.AuthUtils;
+import com.example.utils.UserValidator;
 import lombok.RequiredArgsConstructor;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
 
 import java.util.HashSet;
-import java.util.List;
 import java.util.Optional;
 
 @RequiredArgsConstructor
 @Service
-public class AdminService implements HasAuthUser {
+public class AdminService {
+    private final UserDTOMapper userDTOMapper;
     private final UserRepository userRepository;
-    private final RoleRepository roleRepository;
+    private final AuthUtils authUtils;
     private final PasswordEncoder passwordEncoder;
+    private final RoleRepository roleRepository;
     private final RoleProperties roleProperties;
+    private final UserValidator userValidator;
 
 
-    public List<User> index() {
-        return userRepository.findAll();
-    }
-
-    public void save(User user) {
+    public User save(UserCreationDTO userCreationDTO) {
+        User user = userDTOMapper.convertToUser(userCreationDTO);
         assignDefaultRoleIfNotPresent(user);
         assignNamePasswordIfNotPresent(user);
-        userRepository.save(user);
+
+        userValidator.validate(user);
+
+        return userRepository.save(user);
     }
 
-    private void assignNamePasswordIfNotPresent(User user) {
-        if (user.getPassword() == null) {
-            user.setPassword(passwordEncoder.encode(user.getName()));
+
+
+    public UserDTO update(Long id, UserUpdateDTO userUpdateDTO) {
+        User user = userDTOMapper.convertToUser(userUpdateDTO);
+        user = userRepository.save(updateUserFields(id, user));
+        return userDTOMapper.convertToUserDTO(user);
+    }
+
+    public void delete(Long id) {
+        if (authUtils.getAuthenticatedUser().getId().equals(id)) {
+            throw new NotAllowedDeleteOperationException("You can't delete yourself");
+        } if (userRepository.findById(id).isPresent() && userRepository.findById(id).get().getName().equalsIgnoreCase("admin")) {
+            throw new NotAllowedDeleteOperationException("You can't delete the admin");
         }
-    }
-
-    public User findById(Long id) {
-        return userRepository.findById(id).orElse(null);
-    }
-    public Optional<User> findByNameIgnoreCase(String name) {
-        return userRepository.findUserByNameIgnoreCase(name).stream().findAny();
-    }
-
-    public void update(Long id, User user) {
-        userRepository.save(updateUserFields(id, user));
+        userRepository.deleteById(id);
     }
 
     private User updateUserFields(Long id, User updatedUser) {
@@ -60,6 +66,9 @@ public class AdminService implements HasAuthUser {
         }
 
         User persistedUser = optionalUser.get();
+
+        userValidator.validate(persistedUser, updatedUser);
+
         persistedUser.setName(updatedUser.getName());
         persistedUser.setEmail(updatedUser.getEmail());
 
@@ -67,6 +76,12 @@ public class AdminService implements HasAuthUser {
         persistedUser.setRoles(updatedUser.getRoles());
 
         return persistedUser;
+    }
+
+    private void assignNamePasswordIfNotPresent(User user) {
+        if (user.getPassword() == null) {
+            user.setPassword(passwordEncoder.encode(user.getName()));
+        }
     }
 
     private void assignDefaultRoleIfNotPresent(User user) {
@@ -83,7 +98,8 @@ public class AdminService implements HasAuthUser {
     }
 
     private boolean hasUserRole(User user) {
-        return user.getRoles().stream().anyMatch(role -> role.getRole().equals(roleProperties.getUser()));
+        return user.getRoles().stream()
+                .anyMatch(role -> role.getRole().equals(roleProperties.getUser()));
     }
 
     private void setDefaultRole(User user) {
@@ -91,18 +107,5 @@ public class AdminService implements HasAuthUser {
         user.setRoles(new HashSet<>(){{
             add(roleRepository.findByRoleIgnoreCase(defaultRole).orElseThrow(() -> new RoleNotFoundException(defaultRole)));
         }});
-    }
-
-    public void delete(Long id) {
-        if (getAuthenticatedUser().getId().equals(id)) {
-            throw new NotAllowedDeleteOperationException("You can't delete yourself");
-        } if (userRepository.findById(id).isPresent() && userRepository.findById(id).get().getName().equalsIgnoreCase("admin")) {
-            throw new NotAllowedDeleteOperationException("You can't delete the admin");
-        }
-        userRepository.deleteById(id);
-    }
-
-    public List<Role> showRoles() {
-        return roleRepository.findAll();
     }
 }

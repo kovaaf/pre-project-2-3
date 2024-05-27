@@ -1,18 +1,16 @@
 package com.example.model;
 
-import lombok.AllArgsConstructor;
-import lombok.Getter;
-import lombok.NoArgsConstructor;
-import lombok.Setter;
+import lombok.*;
 import org.springframework.security.core.GrantedAuthority;
 
 import javax.persistence.*;
 import javax.validation.constraints.Pattern;
 
-@Getter
 @Setter
-@AllArgsConstructor
+@Getter
 @NoArgsConstructor
+@AllArgsConstructor
+@ToString
 @Entity
 @Table(name = "roles")
 public class Role implements GrantedAuthority {
@@ -21,6 +19,9 @@ public class Role implements GrantedAuthority {
     private Long id;
     @Pattern(regexp = "ROLE_", message = "Role should start with ROLE_")
     private String role;
+
+    public Role(Long id) {
+    }
 
     @Override
     public String getAuthority() {
