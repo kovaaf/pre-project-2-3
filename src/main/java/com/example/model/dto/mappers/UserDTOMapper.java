@@ -25,6 +25,8 @@ public class UserDTOMapper {
         user.setName(userCreationDTO.getName());
         user.setEmail(userCreationDTO.getEmail());
         user.setRoles(roleMapper.convertToRoleSet(userCreationDTO.getRoles()));
+        user.setHomeAddress(userCreationDTO.getHomeAddress());
+        user.setJobAddress(userCreationDTO.getJobAddress());
         return user;
     }
 
@@ -33,6 +35,8 @@ public class UserDTOMapper {
         user.setName(userUpdateDTO.getName());
         user.setEmail(userUpdateDTO.getEmail());
         user.setRoles(roleMapper.convertToRoleSet(userUpdateDTO.getRoles()));
+        user.setHomeAddress(userUpdateDTO.getHomeAddress());
+        user.setJobAddress(userUpdateDTO.getJobAddress());
         return user;
     }
 
@@ -42,6 +46,8 @@ public class UserDTOMapper {
         userDTO.setName(user.getName());
         userDTO.setEmail(user.getEmail());
         userDTO.setRoles(user.getRoles());
+        userDTO.setHomeAddress(user.getHomeAddress());
+        userDTO.setJobAddress(user.getJobAddress());
         return userDTO;
     }
 }

@@ -34,6 +34,8 @@ public class User {
             inverseJoinColumns = @JoinColumn(name = "roles_id")
     )
     private Set<Role> roles;
+    private String homeAddress;
+    private String jobAddress;
 
     public String getRolesList() {
         return roles.stream()

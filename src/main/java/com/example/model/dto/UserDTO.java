@@ -9,6 +9,7 @@ import javax.validation.constraints.Email;
 import javax.validation.constraints.NotEmpty;
 import javax.validation.constraints.NotNull;
 import javax.validation.constraints.Pattern;
+import java.time.LocalTime;
 import java.util.Set;
 import java.util.stream.Collectors;
 
@@ -26,6 +27,10 @@ public class UserDTO {
     @Email
     private String email;
     private Set<Role> roles;
+    private String homeAddress;
+    private String jobAddress;
+    private LocalTime departureTime;
+    private LocalTime travelTime;
 
     public String getRolesList() {
         return roles.stream()

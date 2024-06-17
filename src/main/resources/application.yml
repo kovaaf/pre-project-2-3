@@ -13,6 +13,11 @@ spring:
         enabled: true
     servlet:
       load-on-startup: 1
+  profiles:
+    default: dev
+    active: dev
+
+
 roles:
   admin: ROLE_ADMIN
   user: ROLE_USER

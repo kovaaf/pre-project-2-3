@@ -77,6 +77,10 @@
                                                 <th>Username</th>
                                                 <th>Email</th>
                                                 <th>Roles</th>
+                                                <th>Home address</th>
+                                                <th>Job address</th>
+                                                <th>Departure time</th>
+                                                <th>Travel time</th>
                                                 <th>Edit</th>
                                                 <th>Delete</th>
                                             </tr>
@@ -115,6 +119,18 @@
                                                     <div class="invalid-feedback" id="invalid-new-user-roles">Error message</div>
                                                 </div>
 
+                                                <div class="form-group">
+                                                    <label for="new-home-address"><strong>Home Address</strong></label>
+                                                    <input class="w-100 form-control text-center" type="text" name="homeAddress" id="new-home-address" placeholder="Home Address" required/>
+                                                    <div class="invalid-feedback" id="invalid-new-user-home-address">Error message</div>
+                                                </div>
+
+                                                <div class="form-group">
+                                                    <label for="new-job-address"><strong>Job Address</strong></label>
+                                                    <input class="w-100 form-control text-center" type="text" name="jobAddress" id="new-job-address" placeholder="Job Address" required/>
+                                                    <div class="invalid-feedback" id="invalid-new-user-job-address">Error message</div>
+                                                </div>
+
                                                 <button class="btn btn-success" type="submit" id="submit-new-user">Add new user</button>
                                             </div>
                                         </form>
@@ -137,6 +153,8 @@
                                     <th>Username</th>
                                     <th>Email</th>
                                     <th>Roles</th>
+                                    <th>Home address</th>
+                                    <th>Job address</th>
                                 </tr>
                                 </thead>
                                 <tbody class="table-group-divider" id="about-user-table">
@@ -182,6 +200,18 @@
                                         <!--                                                        jQuery-->
                                     </select>
                                     <div class="invalid-feedback" id="invalid-edit-user-roles">Error message</div>
+                                </div>
+
+                                <div class="form-group">
+                                    <label for="edit-homeAddress"><strong>Home Address</strong></label>
+                                    <input class="w-100 form-control text-center" type="text" name="homeAddress" id="edit-homeAddress" required/>
+                                    <div class="invalid-feedback" id="invalid-edit-user-home-address">Error message</div>
+                                </div>
+
+                                <div class="form-group">
+                                    <label for="edit-jobAddress"><strong>Job Address</strong></label>
+                                    <input class="w-100 form-control text-center" type="text" name="jobAddress" id="edit-jobAddress" required/>
+                                    <div class="invalid-feedback" id="invalid-edit-user-job-address">Error message</div>
                                 </div>
                             </form>
                         </div>

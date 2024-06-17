@@ -24,6 +24,8 @@ $(document).ready(function () {
             .append('<td>' + user.name + '</td>')
             .append('<td>' + user.email + '</td>')
             .append('<td>' + user.rolesList + '</td>')
+            .append('<td>' + user.homeAddress + '</td>')
+            .append('<td>' + user.jobAddress + '</td>')
             .append('</tr>');
 
         // скрываем админскую панель, если пользователь не админ
@@ -101,6 +103,10 @@ $(document).ready(function () {
                 .append('<td id="row' + user.id + '">' + user.name + '</td>')
                 .append('<td id="row' + user.id + '">' + user.email + '</td>')
                 .append('<td id="row' + user.id + '">' + user.rolesList + '</td>')
+                .append('<td id="row' + user.id + '">' + user.homeAddress + '</td>')
+                .append('<td id="row' + user.id + '">' + user.jobAddress + '</td>')
+                .append('<td id="row' + user.id + '">' + user.departureTime + '</td>')
+                .append('<td id="row' + user.id + '">' + user.travelTime + '</td>')
                 .append('<td id="row' + user.id + '">' +
                     '       <button type="button" ' +
                     '               class="btn btn-info" ' +
@@ -109,6 +115,8 @@ $(document).ready(function () {
                     '               id="edit-user' + user.id +'" ' +
                     '               data-id="' + user.id + '" ' +
                     '               data-name="' + user.name + '"' +
+                    '               data-homeaddress="' + user.homeAddress + '"' +
+                    '               data-jobaddress="' + user.jobAddress + '"' +
                     '               data-email="' + user.email + '">Edit</button></td>' +
                         '<td id="row' + user.id + '"><button type="button" class="btn btn-danger delete-button" id="delete-user' + user.id +'">Delete</button></td>')
             .append('</tr>');
@@ -143,9 +151,13 @@ $(document).ready(function () {
         userId = button.data('id'); // Извлечь информацию из атрибутов data- *
         const userName = button.data('name'); // Извлечь информацию из атрибутов data- *
         const userEmail = button.data('email'); // Извлечь информацию из атрибутов data- *
+        const homeAddress = button.data('homeaddress'); // Извлечь информацию из атрибутов data- *
+        const jobAddress = button.data('jobaddress'); // Извлечь информацию из атрибутов data- *
         modal.find('.modal-title').text('Edit user ' + userName);
         modal.find('.modal-body input#edit-name').val(userName);
         modal.find('.modal-body input#edit-email').val(userEmail);
+        modal.find('.modal-body input#edit-homeAddress').val(homeAddress);
+        modal.find('.modal-body input#edit-jobAddress').val(jobAddress);
         // При необходимости Вы можете инициировать здесь запрос AJAX (а затем выполнить обновление в обратном вызове).
         // Обновите содержимое модального окна.
 

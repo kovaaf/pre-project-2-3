@@ -1,4 +1,4 @@
-package com.example;
+package com.example.stab;
 
 import org.springframework.boot.SpringApplication;
 import org.springframework.boot.autoconfigure.SpringBootApplication;
@@ -6,8 +6,9 @@ import org.springframework.boot.context.properties.ConfigurationPropertiesScan;
 
 @SpringBootApplication
 @ConfigurationPropertiesScan
-public class AppRunner {
+public class TestAppRunner {
     public static void main(String[] args) {
-        SpringApplication.run(AppRunner.class, args);
+        SpringApplication.run(TestAppRunner.class, args);
     }
+
 }

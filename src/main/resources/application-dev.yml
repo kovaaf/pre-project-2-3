@@ -1,0 +1,13 @@
+travel-time:
+  dadataApiUrl: "http://localhost:8081/api/test/dadata"
+  dadataApiKey: "someKey"
+  dadataSecretKey: "someSecretKey"
+  twoGisApiUrl: "http://localhost:8081/api/test/twogis/global?key="
+  twoGisApiKey: "someKey"
+  samplingStep: 20
+  workingHours: 9
+  amountOfTimeCheckedBeforeMinArrival: 30
+  minArrivalHours: 9
+  minArrivalMinutes: 0
+  maxArrivalHours: 12
+  maxArrivalMinutes: 0

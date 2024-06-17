@@ -30,16 +30,18 @@ public class AdminService {
     private final RoleRepository roleRepository;
     private final RoleProperties roleProperties;
     private final UserValidator userValidator;
+    private final TravelTimeService travelTimeService;
 
 
-    public User save(UserCreationDTO userCreationDTO) {
+    public UserDTO save(UserCreationDTO userCreationDTO) {
         User user = userDTOMapper.convertToUser(userCreationDTO);
         assignDefaultRoleIfNotPresent(user);
         assignNamePasswordIfNotPresent(user);
 
         userValidator.validate(user);
-
-        return userRepository.save(user);
+        UserDTO userDTO = userDTOMapper.convertToUserDTO(userRepository.save(user));
+        travelTimeService.setDepartureTimeAndTravelTime(userDTO);
+        return userDTO;
     }
 
 
@@ -47,13 +49,16 @@ public class AdminService {
     public UserDTO update(Long id, UserUpdateDTO userUpdateDTO) {
         User user = userDTOMapper.convertToUser(userUpdateDTO);
         user = userRepository.save(updateUserFields(id, user));
-        return userDTOMapper.convertToUserDTO(user);
+        UserDTO userDTO = userDTOMapper.convertToUserDTO(user);
+        travelTimeService.setDepartureTimeAndTravelTime(userDTO);
+        return userDTO;
     }
 
     public void delete(Long id) {
         if (authUtils.getAuthenticatedUser().getId().equals(id)) {
             throw new NotAllowedDeleteOperationException("You can't delete yourself");
-        } if (userRepository.findById(id).isPresent() && userRepository.findById(id).get().getName().equalsIgnoreCase("admin")) {
+        }
+        if (userRepository.findById(id).isPresent() && userRepository.findById(id).get().getName().equalsIgnoreCase("admin")) {
             throw new NotAllowedDeleteOperationException("You can't delete the admin");
         }
         userRepository.deleteById(id);
@@ -71,6 +76,8 @@ public class AdminService {
 
         persistedUser.setName(updatedUser.getName());
         persistedUser.setEmail(updatedUser.getEmail());
+        persistedUser.setHomeAddress(updatedUser.getHomeAddress());
+        persistedUser.setJobAddress(updatedUser.getJobAddress());
 
         assignDefaultRoleIfNotPresent(updatedUser);
         persistedUser.setRoles(updatedUser.getRoles());

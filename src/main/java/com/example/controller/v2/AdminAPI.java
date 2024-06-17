@@ -1,10 +1,8 @@
 package com.example.controller.v2;
 
-import com.example.model.User;
 import com.example.model.dto.UserCreationDTO;
 import com.example.model.dto.UserDTO;
 import com.example.model.dto.UserUpdateDTO;
-import com.example.model.dto.mappers.UserDTOMapper;
 import com.example.service.AdminService;
 import lombok.RequiredArgsConstructor;
 import org.springframework.web.bind.annotation.*;
@@ -16,12 +14,10 @@ import javax.validation.Valid;
 @RequiredArgsConstructor
 public class AdminAPI {
     private final AdminService adminService;
-    private final UserDTOMapper userDTOMapper;
 
     @PostMapping("/user")
     public UserDTO createNewUser(@Valid @RequestBody UserCreationDTO userCreationDTO) {
-        User persistedUser = adminService.save(userCreationDTO);
-        return userDTOMapper.convertToUserDTO(persistedUser);
+        return adminService.save(userCreationDTO);
     }
 
     @DeleteMapping("/user")

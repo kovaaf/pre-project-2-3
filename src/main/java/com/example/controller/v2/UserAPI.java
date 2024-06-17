@@ -35,7 +35,6 @@ public class UserAPI {
     }
 
     @PostMapping("/register")
-    @ResponseBody
     public UserDTO registerUserAccount(@Valid @RequestBody UserRegisterDTO userRegisterDTO) {
         return registrationService.registerNewUserAccount(userRegisterDTO);
     }

@@ -25,5 +25,6 @@ public class UserCreationDTO {
     private String email;
     @JsonFormat(with = JsonFormat.Feature.ACCEPT_SINGLE_VALUE_AS_ARRAY)
     private List<Long> roles;
-
+    private String homeAddress;
+    private String jobAddress;
 }

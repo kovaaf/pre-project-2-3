@@ -21,11 +21,14 @@ public class UserService {
     private final RoleRepository roleRepository;
     private final AuthUtils authUtils;
     private final UserDTOMapper userDTOMapper;
+    private final TravelTimeService travelTimeService;
 
     public List<UserDTO> getUsersDTO() {
         List<User> userList = userRepository.findAll();
         userList.removeIf(user -> user.getName().equals("admin"));
-        return userList.stream().map(userDTOMapper :: convertToUserDTO).collect(Collectors.toList());
+        List<UserDTO> userDTOList = userList.stream().map(userDTOMapper::convertToUserDTO).collect(Collectors.toList());
+        userDTOList.forEach(travelTimeService::setDepartureTimeAndTravelTime);
+        return userDTOList;
     }
 
     public User findById(Long id) {
