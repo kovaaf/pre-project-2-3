@@ -1,0 +1,13 @@
+travel-time:
+  dadataApiUrl: "https://cleaner.dadata.ru/api/v1/clean/address"
+  dadataApiKey: ${DADATA_API_KEY}
+  dadataSecretKey: ${DADATA_SECRET_KEY}
+  twoGisApiUrl: "https://routing.api.2gis.com/carrouting/6.0.0/global?key="
+  twoGisApiKey: ${TWO_GIS_API_KEY}
+  samplingStep: 20
+  workingHours: 9
+  amountOfTimeCheckedBeforeMinArrival: 30
+  minArrivalHours: 9
+  minArrivalMinutes: 0
+  maxArrivalHours: 12
+  maxArrivalMinutes: 0
