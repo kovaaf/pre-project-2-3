@@ -1,12 +1,14 @@
 spring:
+  sql.init.mode: always
   datasource:
-    url: jdbc:postgresql://localhost:5432/pre-project-2-3
+    url: ${DATASOURCE_URL}
     username: ${DB_USER}
     password: ${DB_PASSWORD}
   jpa:
     show-sql: true
     hibernate:
       ddl-auto: update
+    database-platform: org.hibernate.dialect.PostgreSQLDialect
   mvc:
     hiddenmethod:
       filter:
@@ -15,7 +17,7 @@ spring:
       load-on-startup: 1
   profiles:
     default: dev
-    active: dev
+    active: ${SPRING_PROFILES_ACTIVE}
 
 
 roles:

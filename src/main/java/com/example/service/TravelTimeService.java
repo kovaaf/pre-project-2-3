@@ -25,7 +25,8 @@ public class TravelTimeService {
         Map<LocalTime, Duration> travelTimeByDepartureTime = getTravelTimeByDepartureTime(routingPoints);
         Map.Entry<LocalTime, Duration> minimumTravelTimeByDepartureTime = findMinimumTravelTime(travelTimeByDepartureTime);
 
-        userDTO.setDepartureTime(minimumTravelTimeByDepartureTime.getKey());
+        LocalTime departureTime = minimumTravelTimeByDepartureTime.getKey();
+        userDTO.setDepartureTime(departureTime);
         userDTO.setTravelTime(convertDurationToLocalTime(minimumTravelTimeByDepartureTime.getValue()));
     }
 
@@ -78,6 +79,10 @@ public class TravelTimeService {
 
     private LocalTime convertDurationToLocalTime(Duration duration) {
         long seconds = duration.getSeconds();
-        return LocalTime.of(Long.valueOf(seconds / 3600).intValue(), Long.valueOf(seconds % 3600 / 60).intValue(), Long.valueOf(seconds % 60).intValue());
+        int hours = Long.valueOf(seconds / 3600).intValue();
+        if (hours > 23) {
+            throw new RuntimeException("Hours is greater than 23");
+        }
+        return LocalTime.of(hours, Long.valueOf(seconds % 3600 / 60).intValue(), Long.valueOf(seconds % 60).intValue());
     }
 }

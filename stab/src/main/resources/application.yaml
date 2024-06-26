@@ -1,0 +1,13 @@
+server:
+  port : 8081
+
+#spring:
+#  security:
+#    user:
+#      name: admin
+#      password: admin
+#  sql.init.mode: never
+#  datasource:
+#    url: jdbc:postgresql://localhost:5432/pre-project-2-3
+#    username: postgres
+#    password: postgres

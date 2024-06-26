@@ -1,0 +1,35 @@
+services:
+    app:
+        image: ouidockeruser/pre-project:latest
+        container_name: oui-pre-project-app
+        ports:
+            - 8085:8080
+        env_file: ".env"
+        environment:
+            - DADATA_API_KEY=${DADATA_API_KEY}
+            - DADATA_SECRET_KEY=${DADATA_SECRET_KEY}
+            - TWO_GIS_API_KEY=${TWO_GIS_API_KEY}
+            - DB_PASSWORD=${DB_PASSWORD}
+            - DB_USER=${DB_USER}
+            - DATASOURCE_URL=${DATASOURCE_URL}
+            - SPRING_PROFILES_ACTIVE=${SPRING_PROFILES_ACTIVE}
+        depends_on:
+            - postgres
+
+    postgres:
+        image: postgres
+        container_name: oui-postgres
+        restart: unless-stopped
+        env_file: ".env"
+        environment:
+            - POSTGRES_DB=${DB_NAME}
+            - POSTGRES_USER=${DB_USER}
+            - POSTGRES_PASSWORD=${DB_PASSWORD}
+        ports:
+            - 5435:5432
+        volumes:
+            - oui-pre-project-data:/oui-pre-project-data
+
+volumes:
+    oui-pre-project-data:
+        name: "oui-pre-project-data"

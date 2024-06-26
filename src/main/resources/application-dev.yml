@@ -1,8 +1,8 @@
 travel-time:
-  dadataApiUrl: "http://localhost:8081/api/test/dadata"
+  dadataApiUrl: "http://host.docker.internal:8081/api/test/dadata"
   dadataApiKey: "someKey"
   dadataSecretKey: "someSecretKey"
-  twoGisApiUrl: "http://localhost:8081/api/test/twogis/global?key="
+  twoGisApiUrl: "http://host.docker.internal:8081/api/test/twogis/global?key="
   twoGisApiKey: "someKey"
   samplingStep: 20
   workingHours: 9

@@ -34,4 +34,6 @@ build/
 /mvnw
 /mvnw.cmd
 /.mvn/
-/src/main/resources/sql_schema.txt
+/src/main/resources/data.sql
+/.env
+/db_password.txt

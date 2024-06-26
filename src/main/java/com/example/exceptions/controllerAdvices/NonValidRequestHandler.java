@@ -7,10 +7,11 @@ import org.springframework.web.bind.MethodArgumentNotValidException;
 import org.springframework.web.bind.annotation.ExceptionHandler;
 import org.springframework.web.bind.annotation.ResponseStatus;
 import org.springframework.web.bind.annotation.RestControllerAdvice;
+import org.springframework.web.client.HttpClientErrorException;
 
 @RestControllerAdvice
 public class NonValidRequestHandler {
-    @ExceptionHandler(MethodArgumentNotValidException.class)
+    @ExceptionHandler({MethodArgumentNotValidException.class, HttpClientErrorException.class})
     @ResponseStatus(HttpStatus.BAD_REQUEST)
     String nonValidRequestHandler(BindException ex) {
         FieldError fieldError = ex.getFieldError();
