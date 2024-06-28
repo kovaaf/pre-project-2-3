@@ -1,0 +1,77 @@
+name: Build & Deploy
+
+on:
+  push:
+    branches:
+      - master
+
+jobs:
+  push_compose:
+    name: Push compose_server.yml to remote server
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v3
+      - name: Copy compose_server.yml to server
+        uses: appleboy/scp-action@master
+        with:
+          host: ${{ secrets.HOST_ADDRESS }}
+          username: ${{ secrets.USERNAME_ON_HOST }}
+          key: ${{ secrets.SSH_PRIVATE_KEY }}
+          passphrase: ${{ secrets.SSH_PASSPHRASE }}
+          port: 22
+          source: "compose_server.yml"
+          target: ${{ secrets.SSH_HOME }}
+
+  build_and_push_images:
+    name: Push image to DockerHub
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v3
+      - name: Login to DockerHub
+        uses: docker/login-action@v3
+        with:
+          username: ${{ secrets.DOCKERHUB_USERNAME }}
+          password: ${{ secrets.DOCKERHUB_TOKEN }}
+      - name: Set up Docker Buildx
+        uses: docker/setup-buildx-action@v2
+
+      - name: Review Bot Build and Push to Dockerhub
+        uses: docker/build-push-action@v2
+        with:
+          file: ./Dockerfile
+          push: true
+          tags: ouidockeruser/pre-project
+
+  deploy:
+    name: Deploy
+    runs-on: ubuntu-latest
+    needs: [build_and_push_images, push_compose]
+    steps:
+      - name: Connect with SSH and Deploy
+        uses: appleboy/ssh-action@master
+        with:
+          host: ${{ secrets.HOST_ADDRESS }}
+          username: ${{ secrets.USERNAME_ON_HOST }}
+          key: ${{ secrets.SSH_PRIVATE_KEY }}
+          passphrase: ${{ secrets.SSH_PASSPHRASE }}
+          script: |
+            echo DADATA_API_KEY = ${{ secrets.DADATA_API_KEY }} >> .env
+            echo DADATA_SECRET_KEY = ${{ secrets.DADATA_SECRET_KEY }} >> .env
+            echo DATASOURCE_URL = ${{ secrets.DATASOURCE_URL }} >> .env
+            echo DB_NAME = ${{ secrets.DB_NAME }} >> .env
+            echo DB_PASSWORD = ${{ secrets.DB_PASSWORD }} >> .env
+            echo DB_USER = ${{secrets.DB_USER}} >> .env
+            echo DOCKERHUB_TOKEN = ${{secrets.DOCKERHUB_TOKEN}} >> .env
+            echo DOCKERHUB_USERNAME = ${{secrets.DOCKERHUB_USERNAME}} >> .env
+            echo SPRING_PROFILES_ACTIVE = ${{secrets.SPRING_PROFILES_ACTIVE}} >> .env
+            echo TWO_GIS_API_KEY = ${{secrets.TWO_GIS_API_KEY}} >> .env
+            
+            sudo -S docker stop oui-pre-project-app
+            sudo -S docker rm oui-pre-project-app
+            sudo -S docker rmi ouidockeruser/pre-project
+            sudo -S docker stop oui-postgres
+            sudo -S docker rm oui-postgres
+            sudo -S docker-compose -f compose_server.yml --env-file=.env up -d
+            sudo -S docker ps -a  
+            
+            # rm .env
