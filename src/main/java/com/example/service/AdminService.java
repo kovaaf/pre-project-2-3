@@ -44,8 +44,6 @@ public class AdminService {
         return userDTO;
     }
 
-
-
     public UserDTO update(Long id, UserUpdateDTO userUpdateDTO) {
         User user = userDTOMapper.convertToUser(userUpdateDTO);
         user = userRepository.save(updateUserFields(id, user));

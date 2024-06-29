@@ -27,8 +27,11 @@ public class AppConfig extends WebSecurityConfigurerAdapter {
     @Autowired
     public void configureGlobalSecurity(AuthenticationManagerBuilder auth) throws Exception {
         auth
-                .userDetailsService(userDetailsService)
-                .passwordEncoder(passwordEncoder());
+                    .inMemoryAuthentication()
+                    .withUser("admin").password(passwordEncoder().encode("admin")).authorities(roleProperties.getAdmin());
+        auth
+                    .userDetailsService(userDetailsService)
+                    .passwordEncoder(passwordEncoder());
     }
 
     @Override
