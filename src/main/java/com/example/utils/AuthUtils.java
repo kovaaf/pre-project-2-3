@@ -21,7 +21,7 @@ public class AuthUtils {
     public User getAuthenticatedUser() {
         Authentication authentication = SecurityContextHolder.getContext().getAuthentication();
         String authenticationName = authentication.getName();
-        return userRepository.findByNameIgnoreCase(authenticationName).orElse(buildAdminUser(authenticationName));
+        return userRepository.findByNameIgnoreCase(authenticationName).orElseGet(() -> buildAdminUser(authenticationName));
     }
 
     private User buildAdminUser(String authenticationName) {
