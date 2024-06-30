@@ -4,6 +4,7 @@ import com.example.config.properties.TravelTimeProperties;
 import com.example.model.dto.UserDTO;
 import com.example.model.dto.traveltimeservice.RoutingPointTwoGis;
 import lombok.RequiredArgsConstructor;
+import lombok.extern.slf4j.Slf4j;
 import org.springframework.stereotype.Service;
 
 import java.time.Duration;
@@ -14,6 +15,7 @@ import java.util.Map;
 
 @RequiredArgsConstructor
 @Service
+@Slf4j
 public class TravelTimeService {
     private final TravelTimeProperties travelTimeProperties;
     private final DadataService dadataService;
@@ -28,6 +30,7 @@ public class TravelTimeService {
         LocalTime departureTime = minimumTravelTimeByDepartureTime.getKey();
         userDTO.setDepartureTime(departureTime);
         userDTO.setTravelTime(convertDurationToLocalTime(minimumTravelTimeByDepartureTime.getValue()));
+        log.debug("User: {}, departure time: {}, travel time: {}", userDTO.getName(), departureTime, convertDurationToLocalTime(minimumTravelTimeByDepartureTime.getValue()));
     }
 
     private Map<LocalTime, Duration> getTravelTimeByDepartureTime(List<RoutingPointTwoGis> routingPoints) {

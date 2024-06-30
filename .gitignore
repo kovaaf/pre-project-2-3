@@ -36,3 +36,5 @@ build/
 /.mvn/
 /.env
 /db_password.txt
+*.log
+*.gz

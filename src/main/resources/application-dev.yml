@@ -11,3 +11,12 @@ travel-time:
   minArrivalMinutes: 0
   maxArrivalHours: 12
   maxArrivalMinutes: 0
+
+logging:
+  file:
+    name: './logs/dev-pre-project-2-3.log'
+  logback:
+    rollingpolicy:
+      max-history: 7
+      max-file-size: 10MB
+      total-size-cap: 1GB

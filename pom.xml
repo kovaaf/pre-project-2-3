@@ -15,6 +15,8 @@
     <description>pre-project-2-3</description>
     <properties>
         <java.version>11</java.version>
+        <thymeleaf-extras-springsecurity6.version>3.1.2.RELEASE</thymeleaf-extras-springsecurity6.version>
+        <logstash-logback-encoder.version>6.6</logstash-logback-encoder.version>
     </properties>
     <dependencies>
         <dependency>
@@ -40,8 +42,7 @@
         <dependency>
             <groupId>org.thymeleaf.extras</groupId>
             <artifactId>thymeleaf-extras-springsecurity6</artifactId>
-            <!--		Без версии не находит в удалённом maven repository-->
-            <version>3.1.2.RELEASE</version>
+            <version>${thymeleaf-extras-springsecurity6.version}</version>
         </dependency>
 
         <dependency>
@@ -53,6 +54,11 @@
             <groupId>org.projectlombok</groupId>
             <artifactId>lombok</artifactId>
             <optional>true</optional>
+        </dependency>
+        <dependency>
+            <groupId>net.logstash.logback</groupId>
+            <artifactId>logstash-logback-encoder</artifactId>
+            <version>${logstash-logback-encoder.version}</version>
         </dependency>
     </dependencies>
 
