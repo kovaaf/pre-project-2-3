@@ -1,0 +1,34 @@
+databaseChangeLog:
+  - changeSet:
+      id: 1719829497109-8
+      author: antonio
+      changes:
+        - addUniqueConstraint:
+            columnNames: name
+            constraintName: uc_users_name
+            tableName: users
+  - changeSet:
+      id: 1719829497109-5
+      author: antonio
+      changes:
+        - dropNotNullConstraint:
+            columnDataType: varchar(255)
+            columnName: name
+            tableName: users
+  - changeSet:
+      id: 1719829497109-6
+      author: antonio
+      changes:
+        - dropNotNullConstraint:
+            columnDataType: varchar(255)
+            columnName: password
+            tableName: users
+  - changeSet:
+      id: 1719829497109-7
+      author: antonio
+      changes:
+        - dropNotNullConstraint:
+            columnDataType: varchar(255)
+            columnName: role
+            tableName: roles
+
